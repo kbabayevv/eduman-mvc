@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@10.81.1.33:1521:ORCL
+    username: SYSTEM
+    password: mark1q2w3e$$*
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
