@@ -45,11 +45,12 @@ public class UserServiceForProcedure {
     public void insertUser(UserDto userDto) {
         try {
             var connection = getConnection();
-            CallableStatement statement = connection.prepareCall("{call EDUMAN_COMMON.INSERT_USER_PROCEDURE(?,?,?)}");
+            CallableStatement statement = connection.prepareCall("{call EDUMAN_COMMON.INSERT_USER_PROCEDURE(?,?,?,?)}");
 
-            statement.setString(1, userDto.getName());
-            statement.setString(2, userDto.getSurname());
-            statement.setString(3, userDto.getMiddleName());
+            statement.setLong(1,userDto.getId());
+            statement.setString(2, userDto.getName());
+            statement.setString(3, userDto.getSurname());
+            statement.setString(4, userDto.getMiddleName());
 
             statement.execute();
             statement.close();

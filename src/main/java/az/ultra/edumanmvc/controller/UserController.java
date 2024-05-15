@@ -43,6 +43,29 @@ public class UserController {
         return "com-users";
     }
 
+    @RequestMapping(value = {"/com-students"}, method = GET)
+    public String getStudents(Model model) {
+        List<UserDto> userDto = userService.getStudents();
+        model.addAttribute("userList", userDto);
+        return "com-users";
+    }
+
+    @RequestMapping(value = {"/searchAll"}, method = GET)
+    @ResponseBody
+    public List<UserDto> searchAllUsers(@RequestParam String search) {
+        List<UserDto> userDto = userService.searchByName(search);
+//        model.addAttribute("userList", userDto);
+        return userDto;
+    }
+
+    @RequestMapping(value = {"/searchStudents"}, method = GET)
+    @ResponseBody
+    public List<UserDto> searchStudents(@RequestParam String search) {
+        List<UserDto> userDto = userService.searchByNameStudents(search);
+//        model.addAttribute("userList", userDto);
+        return userDto;
+    }
+
     @RequestMapping(value = {"/redirectUser"}, method = GET)
     public String redirectUserForUpdate() {
         return "edit-user";

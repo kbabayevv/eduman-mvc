@@ -12,6 +12,11 @@
     <h2>Add User</h2>
     <form action="${pageContext.request.contextPath}/create-user" method="post">
         <div class="form-group">
+            <label for="id">ID:</label>
+            <input type="text" class="form-control" id="id" name="id" required>
+        </div>
+
+        <div class="form-group">
             <label for="name">Name:</label>
             <input type="text" class="form-control" id="name" name="name" required>
         </div>

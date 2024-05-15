@@ -37,4 +37,21 @@ public class UserService {
         String query = DELETE_USER.getQuery();
         jdbcTemplate.update(query, id);
     }
+
+    public List<UserDto> getStudents() {
+        String query = SELECT_ONLY_STUDENTS.getQuery();
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(UserDto.class));
+    }
+
+    public List<UserDto> searchByName(String search) {
+        search = search.toUpperCase();
+        String query = SEARCH_BY_NAME_ALL_USERS.getQuery();
+        return jdbcTemplate.query(query, new Object[]{"%" + search + "%"}, new BeanPropertyRowMapper<>(UserDto.class));
+    }
+
+    public List<UserDto> searchByNameStudents(String search) {
+        search = search.toUpperCase();
+        String query = SEARCH_BY_NAME_FOR_STUDENTS.getQuery();
+        return jdbcTemplate.query(query, new Object[]{"%" + search + "%"}, new BeanPropertyRowMapper<>(UserDto.class));
+    }
 }
