@@ -50,21 +50,22 @@ public class UserController {
         return "com-users";
     }
 
-    @RequestMapping(value = {"/searchAll"}, method = GET)
+    @RequestMapping(value = {"/searchAll"}, method = RequestMethod.GET)
     @ResponseBody
-    public List<UserDto> searchAllUsers(@RequestParam String search) {
-        List<UserDto> userDto = userService.searchByName(search);
-//        model.addAttribute("userList", userDto);
-        return userDto;
+    public List<UserDto> searchAllUsers(@RequestParam String search,
+                                        @RequestParam(defaultValue = "1") int page,
+                                        @RequestParam(defaultValue = "10") int pageSize) {
+        return userService.searchByName(search, page, pageSize);
     }
 
-    @RequestMapping(value = {"/searchStudents"}, method = GET)
+    @RequestMapping(value = {"/searchStudents"}, method = RequestMethod.GET)
     @ResponseBody
-    public List<UserDto> searchStudents(@RequestParam String search) {
-        List<UserDto> userDto = userService.searchByNameStudents(search);
-//        model.addAttribute("userList", userDto);
-        return userDto;
+    public List<UserDto> searchStudents(@RequestParam String search,
+                                        @RequestParam(defaultValue = "1") int page,
+                                        @RequestParam(defaultValue = "10") int pageSize) {
+        return userService.searchByNameStudents(search, page, pageSize);
     }
+
 
     @RequestMapping(value = {"/redirectUser"}, method = GET)
     public String redirectUserForUpdate() {
@@ -77,7 +78,6 @@ public class UserController {
         log.info("Person is {}", userDto);
         return "redirect:/com-users";
     }
-
 
     @RequestMapping(value = {"/deleteUser/{id}"}, method = GET)
     public String deleteUser(@PathVariable Long id) {

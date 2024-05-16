@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
@@ -14,7 +15,7 @@
         }
 
         header {
-            background-color: #735dff;
+            background-color: rgb(71, 80, 255);
             color: #fff;
             padding: 15px 0;
             text-align: center;
@@ -41,7 +42,7 @@
         }
 
         th {
-            background-color: #605dff;
+            background-color: rgb(71, 80, 255);
             color: #fff;
             cursor: pointer;
         }
@@ -52,11 +53,11 @@
         }
 
         th:hover {
-            background-color: #4540a5;
+            background-color: rgb(71, 80, 255);
         }
 
         td {
-            background-color: #fff;
+            background-color: #f5f5f5; /* Change the background color of table cells */
             vertical-align: middle;
         }
 
@@ -93,6 +94,36 @@
 
         .btn-danger:hover {
             background-color: #c82333;
+        }
+
+        /* Add some padding and margin to the search form and user type select */
+        #searchForm, #userTypeSelect {
+            margin-bottom: 20px;
+        }
+
+        /* Style the search input and button */
+        #searchInput {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            background-color: rgb(71, 80, 255);
+        }
+
+        #searchForm button {
+            padding: 8px 15px;
+            background-color: rgb(71, 80, 255);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #searchForm button:hover {
+            background-color: rgb(71, 80, 255);
         }
     </style>
 </head>
@@ -148,120 +179,15 @@
         <tbody id="userListId">
         </tbody>
     </table>
+
+    <br>
+    <!-- Pagination Button -->
+    <div id="pagination">
+        <button id="loadMoreBtn" class="btn btn-primary">See More</button>
+    </div>
+
 </div>
 
-<script>
-
-    fetchPersons();
-
-    document.getElementById('userTypeSelect').addEventListener('change', function () {
-        fetchPersons();
-    });
-
-    function compareAzerbaijaniStrings(a, b) {
-        return a.localeCompare(b, 'az', {sensitivity: 'base'});
-    }
-
-
-    function sortTableForAzerbaijani(columnIndex) {
-        var table, rows, switching, i, x, y, shouldSwitch;
-        table = document.getElementById("userTable");
-        switching = true;
-        while (switching) {
-            switching = false;
-            rows = table.getElementsByTagName("tr");
-            for (i = 1; i < (rows.length - 1); i++) {
-                shouldSwitch = false;
-                x = rows[i].getElementsByTagName("td")[columnIndex];
-                y = rows[i + 1].getElementsByTagName("td")[columnIndex];
-                if (compareAzerbaijaniStrings(x.innerHTML, y.innerHTML) > 0) {
-                    shouldSwitch = true;
-                    break;
-                }
-            }
-            if (shouldSwitch) {
-                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                switching = true;
-            }
-        }
-    }
-
-    function sortTableForID(columnIndex) {
-        var table, rows, switching, i, x, y, shouldSwitch;
-        table = document.getElementById("userTable");
-        switching = true;
-        while (switching) {
-            switching = false;
-            rows = table.getElementsByTagName("tr");
-            for (i = 1; i < (rows.length - 1); i++) {
-                shouldSwitch = false;
-                x = parseInt(rows[i].getElementsByTagName("td")[columnIndex].innerHTML);
-                y = parseInt(rows[i + 1].getElementsByTagName("td")[columnIndex].innerHTML);
-                if (x > y) {
-                    shouldSwitch = true;
-                    break;
-                }
-            }
-            if (shouldSwitch) {
-                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                switching = true;
-            }
-        }
-    }
-
-
-    function deleteUser(userId) {
-        if (confirm("Are you sure you want to delete this user?")) {
-            window.location.href = "${pageContext.request.contextPath}/deleteUser/" + userId;
-        }
-    }
-
-    // Function to perform live search
-    document.getElementById('searchInput').addEventListener('input', function() {
-        fetchPersons();
-    });
-
-    // Function to handle dropdown change
-    function fetchPersons() {
-        document.getElementById('userListId').innerHTML = '';
-
-        var userType = document.getElementById('userTypeSelect').value // Get the selected user type
-        var searchInput = document.getElementById('searchInput').value; // Get the current search input value
-
-        // Construct the API URL based on the selected user type
-        var apiUrl = userType === 'students' ? '/searchStudents' : '/searchAll';
-
-        // Send AJAX request to backend API
-        var xhr = new XMLHttpRequest();
-
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                // Update user table with new HTML content
-                var persons = JSON.parse(xhr.responseText);
-                var html = ''; // Initialize an empty string to store HTML
-
-                // Iterate over each user in the array
-                persons.forEach(function (user) {
-                    // Construct HTML for each user row
-                    html += '<tr>';
-                    html += '<td>' + user.id + '</td>';
-                    html += '<td>' + user.name + '</td>';
-                    html += '<td>' + user.surname + '</td>';
-                    html += '<td>' + user.middleName + '</td>';
-                    html += '<td><a href="http://localhost:8080/redirectUser?id=' + user.id + '" class="btn btn-primary">Edit</a></td>';
-                    html += '<td><button onclick="deleteUser(' + user.id + ')" class="btn btn-danger">Delete</button></td>';
-                    html += '</tr>';
-                });
-
-                // Update the user table with the generated HTML
-                document.getElementById('userListId').innerHTML = html;
-            }
-        };
-        xhr.open('GET', apiUrl + '?search=' + searchInput, true);
-        xhr.send();
-    }
-
-
-</script>
+<script src="/com-users.js"></script>
 </body>
 </html>

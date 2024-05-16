@@ -43,15 +43,26 @@ public class UserService {
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(UserDto.class));
     }
 
-    public List<UserDto> searchByName(String search) {
+    public List<UserDto> searchByName(String search, int page, int pageSize) {
         search = search.toUpperCase();
-        String query = SEARCH_BY_NAME_ALL_USERS.getQuery();
-        return jdbcTemplate.query(query, new Object[]{"%" + search + "%"}, new BeanPropertyRowMapper<>(UserDto.class));
+        String query = SEARCH_BY_NAME_ALL_USERS_WITH_PAGE.getQuery();
+        return jdbcTemplate.query(query, new Object[]{"%" + search + "%", page + pageSize, pageSize},
+                new BeanPropertyRowMapper<>(UserDto.class));
     }
 
-    public List<UserDto> searchByNameStudents(String search) {
+    public List<UserDto> searchByNameStudents(String search, int page, int pageSize) {
         search = search.toUpperCase();
-        String query = SEARCH_BY_NAME_FOR_STUDENTS.getQuery();
-        return jdbcTemplate.query(query, new Object[]{"%" + search + "%"}, new BeanPropertyRowMapper<>(UserDto.class));
+        String query = SELECT_ONLY_STUDENTS_WITH_PAGE.getQuery();
+        return jdbcTemplate.query(query, new Object[]{"%" + search + "%", page + pageSize, pageSize},
+                new BeanPropertyRowMapper<>(UserDto.class));
+    }
+
+    public List<UserDto> selectWithPagination(int limit) {
+        String query = SELECT_ONLY_STUDENTS_WITH_PAGE.getQuery();
+        List<UserDto> userDtos = jdbcTemplate.query(query,
+                new Object[]{limit},
+                new BeanPropertyRowMapper<>(UserDto.class));
+        userDtos.forEach(System.out::println);
+        return userDtos;
     }
 }
