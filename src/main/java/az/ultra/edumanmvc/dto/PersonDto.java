@@ -13,4 +13,11 @@ public class PersonDto {
     private String name;
     private String surname;
     private String middleName;
+
+    public PersonDto(Long _id, String _name, String _surname)
+    {
+        id = _id;
+        name = _name;
+        surname = _surname;
+    }
 }

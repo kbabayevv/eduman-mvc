@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class DeterminantController {
@@ -38,5 +42,9 @@ public class DeterminantController {
         return determinantService.calculateDeterminant(matrix);
     }
 
+    @GetMapping("/getList")
+    public String getAllList(Model model) {
 
+        return "getList";
+    }
 }

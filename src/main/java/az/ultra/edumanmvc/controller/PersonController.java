@@ -4,13 +4,12 @@ import az.ultra.edumanmvc.dto.PersonDetails;
 import az.ultra.edumanmvc.dto.PersonDto;
 import az.ultra.edumanmvc.service.PersonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -20,6 +19,18 @@ public class PersonController {
 
     private final PersonService personService;
 
+    @PostMapping("/test")
+    @ResponseBody
+    public ResponseEntity<ArrayList<PersonDto>> testApi()
+    {
+        ArrayList<PersonDto> l = new ArrayList<PersonDto>();
+
+        l.add(new PersonDto((long)1, "Name1", "Surname1"));
+        l.add(new PersonDto((long)2, "Name2", "Surname2"));
+        l.add(new PersonDto((long)3, "Name3", "Surname3"));
+
+        return ResponseEntity.ok(l);
+    }
     @GetMapping("/all")
     @ResponseBody
     public ResponseEntity<List<PersonDto>> getAllPersons() {
