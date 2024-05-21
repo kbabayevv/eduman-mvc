@@ -1,0 +1,19 @@
+package az.ultra.edumanmvc.constraints;
+
+import javax.validation.Constraint;
+import javax.validation.Payload;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = CapitalizedTextValidator.class)
+public @interface Capitalized {
+
+    String message() default "Text's first letter must be capital";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
+
+}
